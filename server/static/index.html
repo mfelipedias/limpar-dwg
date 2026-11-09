@@ -31,18 +31,29 @@
       </p>
     </section>
 
-    <label id="drop" class="sheet" for="file-input" tabindex="0" aria-describedby="limit-hint">
-      <input id="file-input" type="file" accept=".dwg,.DWG" multiple hidden>
+    <div id="sheet" class="sheet">
       <span class="crop crop-tl" aria-hidden="true"></span><span class="crop crop-tr" aria-hidden="true"></span>
       <span class="crop crop-bl" aria-hidden="true"></span><span class="crop crop-br" aria-hidden="true"></span>
-      <svg class="sheet-icon" viewBox="0 0 48 48" aria-hidden="true">
-        <path d="M12 6h17l9 9v27H12z"/><path d="M29 6v9h9"/><path d="M25 37V22"/><path d="M19.5 27.5 25 22l5.5 5.5"/>
-      </svg>
-      <span class="sheet-title" data-idle="Solte os arquivos .dwg aqui" data-over="Pode soltar">Solte os arquivos .dwg aqui</span>
-      <span class="sheet-or">ou</span>
-      <span class="btn btn-primary sheet-btn">Escolher arquivos</span>
-      <span id="limit-hint" class="sheet-hint">Pode enviar vários de uma vez.</span>
-    </label>
+
+      <label id="drop" class="sheet-drop" for="file-input" tabindex="0" aria-describedby="limit-hint">
+        <input id="file-input" type="file" accept=".dwg,.DWG" multiple hidden>
+        <svg class="sheet-icon" viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M12 6h17l9 9v27H12z"/><path d="M29 6v9h9"/><path d="M25 37V22"/><path d="M19.5 27.5 25 22l5.5 5.5"/>
+        </svg>
+        <span class="sheet-title" data-idle="Solte os arquivos .dwg aqui" data-more="Solte mais arquivos .dwg aqui" data-over="Pode soltar">Solte os arquivos .dwg aqui</span>
+        <span class="sheet-or">ou</span>
+        <span class="btn btn-primary sheet-btn">Escolher arquivos</span>
+        <span id="limit-hint" class="sheet-hint">Pode enviar vários de uma vez.</span>
+      </label>
+
+      <section id="files" class="files" hidden aria-labelledby="files-title">
+        <div class="files-head">
+          <h2 id="files-title">Seus arquivos</h2>
+          <button id="clear-done" class="btn btn-quiet" type="button" hidden>Tirar os concluídos da lista</button>
+        </div>
+        <div id="jobs" class="jobs"></div>
+      </section>
+    </div>
 
     <div class="option">
       <label class="switch">
@@ -54,14 +65,6 @@
         </span>
       </label>
     </div>
-
-    <section id="files" class="files" hidden aria-labelledby="files-title">
-      <div class="files-head">
-        <h2 id="files-title">Seus arquivos</h2>
-        <button id="clear-done" class="btn btn-quiet" type="button" hidden>Tirar os concluídos da lista</button>
-      </div>
-      <div id="jobs" class="jobs"></div>
-    </section>
 
     <section class="notes" aria-labelledby="notes-title">
       <h2 id="notes-title">Bom saber</h2>

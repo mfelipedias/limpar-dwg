@@ -146,8 +146,8 @@ function addFiles(files) {
   pumpUploads();
 }
 
-// Leva a pessoa até o arquivo recém-enviado: a lista fica abaixo da área de soltar,
-// fora da tela, e sem isso parece que o envio não aconteceu.
+// Garante que o arquivo recém-enviado fique à vista: em telas baixas ou com a página
+// rolada, o card poderia nascer fora da tela e parecer que o envio não aconteceu.
 function revealJob(j) {
   const el = j.el;
   if (!el) return;
@@ -155,7 +155,7 @@ function revealJob(j) {
     const r = el.getBoundingClientRect();
     if (r.top < 0 || r.top > window.innerHeight - 160) {
       const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-      $("#files").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      $("#sheet").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     }
     el.classList.remove("is-new");
     void el.offsetWidth;
@@ -518,9 +518,18 @@ function jobState(j) {
   return j.data?.state || (j.xhr ? "uploading" : "waiting");
 }
 
+function setSheetTitle() {
+  const sheet = $("#sheet");
+  const title = $(".sheet-title", sheet);
+  title.textContent = sheet.classList.contains("is-over") ? title.dataset.over
+    : sheet.classList.contains("has-files") ? title.dataset.more : title.dataset.idle;
+}
+
 function updateList() {
   const jobs = [...state.jobs.values()];
   $("#files").hidden = jobs.length === 0;
+  $("#sheet").classList.toggle("has-files", jobs.length > 0);
+  setSheetTitle();
   $("#clear-done").hidden = jobs.filter((j) => TERMINAL.has(jobState(j))).length < 2;
   updateTitle(jobs);
 }
@@ -543,10 +552,9 @@ function updateTitle(jobs) {
 function setupDrop() {
   const drop = $("#drop");
   const input = $("#file-input");
-  const title = $(".sheet-title", drop);
   const setOver = (on) => {
-    drop.classList.toggle("is-over", on);
-    title.textContent = on ? title.dataset.over : title.dataset.idle;
+    $("#sheet").classList.toggle("is-over", on);
+    setSheetTitle();
   };
 
   input.addEventListener("change", () => { addFiles([...input.files]); input.value = ""; });
