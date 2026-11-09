@@ -205,7 +205,7 @@ h1 {
 
 /* ------------------------------------------------------------ lista de arquivos */
 
-.files { margin-top: 3rem; }
+.files { margin-top: 3rem; scroll-margin-top: 1.5rem; }
 .files-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: .9rem; flex-wrap: wrap; }
 
 h2 { font-size: 1.35rem; font-weight: 700; font-stretch: 112%; letter-spacing: -.01em; line-height: 1.2; }
@@ -217,6 +217,11 @@ h2 { font-size: 1.35rem; font-weight: 700; font-stretch: 112%; letter-spacing: -
   border: 1px solid var(--rule);
   border-radius: 10px;
   padding: 1.15rem 1.15rem 1rem;
+}
+.job.is-new { animation: job-new 1.6s ease-out; }
+@keyframes job-new {
+  0%, 35% { border-color: var(--cyan); box-shadow: 0 0 0 4px var(--cyan-soft); }
+  100% { border-color: var(--rule); box-shadow: 0 0 0 4px transparent; }
 }
 @media (min-width: 40rem) { .job { padding: 1.4rem 1.5rem 1.15rem; } }
 

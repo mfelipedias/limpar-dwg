@@ -124,6 +124,7 @@ function announce(msg) {
 // ---------------------------------------------------------------- envio
 function addFiles(files) {
   const maxMB = state.status?.max_upload_mb || 1024;
+  let newest = null;
   for (const file of files) {
     const key = "u" + Math.random().toString(36).slice(2);
     const j = { key, file, upload: { loaded: 0, total: file.size, start: 0 } };
@@ -138,8 +139,29 @@ function addFiles(files) {
     }
     state.jobs.set(key, j);
     render(j);
+    newest = j;
   }
+  updateList();
+  if (newest) revealJob(newest);
   pumpUploads();
+}
+
+// Leva a pessoa até o arquivo recém-enviado: a lista fica abaixo da área de soltar,
+// fora da tela, e sem isso parece que o envio não aconteceu.
+function revealJob(j) {
+  const el = j.el;
+  if (!el) return;
+  requestAnimationFrame(() => {
+    const r = el.getBoundingClientRect();
+    if (r.top < 0 || r.top > window.innerHeight - 160) {
+      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      $("#files").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    }
+    el.classList.remove("is-new");
+    void el.offsetWidth;
+    el.classList.add("is-new");
+    el.addEventListener("animationend", () => el.classList.remove("is-new"), { once: true });
+  });
 }
 
 function pumpUploads() {
