@@ -11,7 +11,7 @@ O motor de limpeza lê e grava DWG diretamente, em Rust.
 e 70% menor, com o mesmo desenho.
 
 <p align="center">
-  <img src="docs/inicio.png" alt="Página inicial com a área para soltar os arquivos .dwg" width="720">
+  <img src="docs/inicio.png" alt="Página inicial com a opção de apagar blocos sem uso e a área para soltar os arquivos .dwg" width="720">
 </p>
 
 <p align="center">
@@ -21,10 +21,11 @@ e 70% menor, com o mesmo desenho.
 
 ## Como usar
 
-1. Abra a página e arraste um ou mais arquivos `.dwg` para a área indicada (ou clique em
-   **Escolher arquivos**).
-2. Se quiser, ligue **Apagar também os blocos sem uso** para um arquivo ainda menor.
-3. Acompanhe o progresso de cada arquivo e clique em **Baixar cópia limpa** quando terminar.
+1. Se quiser um arquivo ainda menor, ligue antes **Apagar também os blocos sem uso**. A limpeza
+   começa assim que o arquivo chega, então a opção vale para os envios feitos depois de ligá-la.
+2. Arraste um ou mais arquivos `.dwg` para a área indicada (ou clique em **Escolher arquivos**).
+   Eles aparecem ali mesmo, com o progresso de cada um.
+3. Clique em **Baixar cópia limpa** quando terminar.
 4. Abra a cópia `_LIMPO.dwg` no AutoCAD e confira antes de substituir o original.
 
 A página funciona no modo claro e escuro e lembra os arquivos enviados, então dá para fechar a aba e

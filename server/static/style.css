@@ -194,7 +194,7 @@ h1 {
 
 /* ------------------------------------------------------------ opção */
 
-.option { margin-top: 1.25rem; }
+.option { margin-bottom: 1.25rem; }
 .sheet { scroll-margin-top: 1.5rem; }
 .switch { display: flex; align-items: flex-start; gap: .85rem; cursor: pointer; }
 .switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
