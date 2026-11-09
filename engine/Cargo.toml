@@ -1,0 +1,14 @@
+[package]
+name = "nanoclean"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+acadrust = "0.6.8"
+
+[profile.release]
+opt-level = 3
+debug = false
+
+[patch.crates-io]
+acadrust = { path = "vendor/acadrust" }

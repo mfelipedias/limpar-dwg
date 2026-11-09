@@ -1,0 +1,18 @@
+# configuração local (pode ter senha)
+.env
+
+# build do motor
+engine/target/
+
+# desenhos: nunca versionar plantas de clientes
+*.dwg
+*.DWG
+*.dxf
+*.DXF
+
+# dados do servidor em execução local
+data/
+
+__pycache__/
+*.pyc
+.venv/

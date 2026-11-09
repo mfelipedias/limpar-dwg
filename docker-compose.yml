@@ -1,0 +1,18 @@
+services:
+  limpar-dwg:
+    build: .
+    image: limpar-dwg:latest
+    container_name: limpar-dwg
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8080}:8080"
+    env_file: .env
+    volumes:
+      - dados:/data
+    # Arquivos com muito lixo usam bastante memoria durante a limpeza
+    # (a planta do Jabaquara, 88 MB com 1,6 milhao de tabelas, chega a ~6,5 GB).
+    # Ajuste conforme o servidor:
+    # mem_limit: 8g
+
+volumes:
+  dados:

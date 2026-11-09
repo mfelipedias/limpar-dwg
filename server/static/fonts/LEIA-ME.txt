@@ -1,0 +1,2 @@
+archivo-latin.woff2: fonte Archivo (Omnibus-Type), licença SIL Open Font License 1.1 (https://openfontlicense.org).
+Baixada do Google Fonts e embutida para o site não depender de serviços externos.

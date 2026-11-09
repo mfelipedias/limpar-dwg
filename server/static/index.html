@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Limpar DWG</title>
+  <meta name="description" content="Envie um DWG salvo no nanoCAD e baixe uma cópia limpa, leve de novo para abrir no AutoCAD.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a7480'/%3E%3Cpath d='M8 9h11l5 5v9H8z' fill='none' stroke='white' stroke-width='2.4' stroke-linejoin='round'/%3E%3Cpath d='M12 18l3 3 5-6' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <a class="brand" href="./">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="6"/><path d="M8 9h11l5 5v9H8z"/><path d="M12 18l3 3 5-6"/></svg>
+        <span>Limpar DWG</span>
+      </a>
+      <div id="server-status" class="status" role="status">
+        <span class="status-dot"></span><span class="status-text">Conectando</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>Seu DWG do nanoCAD leve de novo</h1>
+      <p class="lede">
+        Arquivos salvos no nanoCAD acumulam um lixo invisível que deixa o AutoCAD lento para abrir
+        e travado na hora de salvar. Envie o arquivo aqui e baixe uma cópia limpa. O desenho continua igual.
+      </p>
+    </section>
+
+    <label id="drop" class="sheet" for="file-input" tabindex="0" aria-describedby="limit-hint">
+      <input id="file-input" type="file" accept=".dwg,.DWG" multiple hidden>
+      <span class="crop crop-tl" aria-hidden="true"></span><span class="crop crop-tr" aria-hidden="true"></span>
+      <span class="crop crop-bl" aria-hidden="true"></span><span class="crop crop-br" aria-hidden="true"></span>
+      <svg class="sheet-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <path d="M12 6h17l9 9v27H12z"/><path d="M29 6v9h9"/><path d="M25 37V22"/><path d="M19.5 27.5 25 22l5.5 5.5"/>
+      </svg>
+      <span class="sheet-title" data-idle="Solte os arquivos .dwg aqui" data-over="Pode soltar">Solte os arquivos .dwg aqui</span>
+      <span class="sheet-or">ou</span>
+      <span class="btn btn-primary sheet-btn">Escolher arquivos</span>
+      <span id="limit-hint" class="sheet-hint">Pode enviar vários de uma vez.</span>
+    </label>
+
+    <div class="option">
+      <label class="switch">
+        <input id="opt-purge" type="checkbox" role="switch">
+        <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+        <span class="switch-text">
+          <span class="switch-label">Apagar também os blocos sem uso</span>
+          <span class="switch-help">Remove definições de blocos que não aparecem em nenhum lugar do desenho. O arquivo fica menor e nada visível muda.</span>
+        </span>
+      </label>
+    </div>
+
+    <section id="files" class="files" hidden aria-labelledby="files-title">
+      <div class="files-head">
+        <h2 id="files-title">Seus arquivos</h2>
+        <button id="clear-done" class="btn btn-quiet" type="button" hidden>Tirar os concluídos da lista</button>
+      </div>
+      <div id="jobs" class="jobs"></div>
+    </section>
+
+    <section class="notes" aria-labelledby="notes-title">
+      <h2 id="notes-title">Bom saber</h2>
+      <dl>
+        <div>
+          <dt>Seu arquivo original não muda</dt>
+          <dd>Você baixa uma cópia com <q>_LIMPO</q> no nome. Abra no AutoCAD, confira e só depois substitua o original.</dd>
+        </div>
+        <div>
+          <dt>Tabelas ligadas ao Excel deixam de atualizar</dt>
+          <dd>Se o desenho tem tabelas vinculadas a uma planilha, o conteúdo atual fica, mas o vínculo é desfeito. A página avisa quando isso acontece.</dd>
+        </div>
+        <div>
+          <dt>A versão do DWG é mantida</dt>
+          <dd>A cópia limpa sai na mesma versão do arquivo enviado e abre nos mesmos programas.</dd>
+        </div>
+        <div>
+          <dt>Leva de segundos a um minuto</dt>
+          <dd>Mesmo plantas grandes, de quase 100 MB, ficam prontas em cerca de um minuto. Você pode trocar de aba enquanto espera.</dd>
+        </div>
+        <div>
+          <dt>Os arquivos não ficam guardados</dt>
+          <dd id="retention">O servidor apaga os arquivos enviados e as cópias limpas depois de alguns dias.</dd>
+        </div>
+      </dl>
+    </section>
+  </main>
+
+  <div id="announcer" class="sr-only" aria-live="polite"></div>
+
+  <template id="job-tpl">
+    <article class="job">
+      <header class="job-head">
+        <svg class="job-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>
+        <div class="job-title">
+          <h3 class="job-name"></h3>
+          <p class="job-meta"></p>
+        </div>
+        <span class="tag"></span>
+      </header>
+
+      <div class="job-live">
+        <ol class="steps" aria-label="Etapas">
+          <li data-step="upload"><span class="step-mark"></span>Envio</li>
+          <li data-step="queue"><span class="step-mark"></span>Fila</li>
+          <li data-step="clean"><span class="step-mark"></span>Limpeza</li>
+          <li data-step="done"><span class="step-mark"></span>Pronto</li>
+        </ol>
+        <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="bar-fill"></div></div>
+        <p class="job-status"><span class="status-main"></span><span class="status-side"></span></p>
+      </div>
+
+      <div class="job-result" hidden>
+        <p class="result-head"></p>
+        <div class="dims" aria-hidden="true">
+          <div class="dim dim-before"><span class="dim-line"></span><span class="dim-label"></span></div>
+          <div class="dim dim-after"><span class="dim-line"></span><span class="dim-label"></span></div>
+        </div>
+        <p class="result-sub"></p>
+      </div>
+
+      <div class="job-notes"></div>
+
+      <div class="job-actions">
+        <a class="btn btn-primary btn-download" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 19h14"/></svg>
+          Baixar cópia limpa
+        </a>
+        <button class="btn btn-secondary btn-retry" type="button" hidden>Tentar de novo</button>
+        <button class="btn btn-quiet btn-cancel" type="button" hidden>Cancelar</button>
+        <button class="btn btn-quiet btn-remove" type="button" hidden>Tirar da lista</button>
+      </div>
+
+      <details class="tech" hidden>
+        <summary>Detalhes técnicos</summary>
+        <dl class="tech-stats"></dl>
+        <pre class="tech-log"></pre>
+      </details>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
